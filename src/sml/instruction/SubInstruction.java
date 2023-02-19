@@ -24,7 +24,7 @@ public class SubInstruction extends Instruction {
 	 *
 	 * @param label the label of the instruction (can be null)
 	 * @param result the register where the result will be stored
-	 * @param source the register containing the second value to be added
+	 * @param source the register containing the second value to be subtracted
 	 */
 	public SubInstruction(String label, RegisterName result, RegisterName source) {
 		super(label, OP_CODE);

@@ -31,7 +31,7 @@ class MulInstructionTest {
     void executeValid() {
         registers.set(EAX, 5);
         registers.set(EBX, 6);
-        Instruction instruction = new MulInstructionTest(null, EAX, EBX);
+        Instruction instruction = new MulInstruction(null, EAX, EBX);
         instruction.execute(machine);
         Assertions.assertEquals(30, machine.getRegisters().get(EAX));
     }
@@ -40,48 +40,48 @@ class MulInstructionTest {
     void executeValidTwo() {
         registers.set(EAX, 7);
         registers.set(EBX, -6);
-        Instruction instruction = new MulInstructionTest(null, EAX, EBX);
+        Instruction instruction = new MulInstruction(null, EAX, EBX);
         instruction.execute(machine);
         Assertions.assertEquals(-42, machine.getRegisters().get(EAX));
     }
 
     @Test
     void testToString() {
-        Instruction instruction = new MulInstructionTest(null, EAX, EBX);
+        Instruction instruction = new MulInstruction(null, EAX, EBX);
         Assertions.assertEquals("mul EAX EBX", instruction.toString());
     }
 
     @Test
     void testToStringWithLabel() {
-        Instruction instruction = new MulInstructionTest("alessio", EAX, EBX);
+        Instruction instruction = new MulInstruction("alessio", EAX, EBX);
         Assertions.assertEquals("alessio: mul EAX EBX", instruction.toString());
     }
 
     @Test
     void testEquals() {
-        Instruction instruction = new MulInstructionTest(null, EAX, EBX);
-        Instruction instructionCopy = new MulInstructionTest(null, EAX, EBX);
+        Instruction instruction = new MulInstruction(null, EAX, EBX);
+        Instruction instructionCopy = new MulInstruction(null, EAX, EBX);
         Assertions.assertEquals(instruction, instructionCopy);
     }
 
     @Test
     void testEqualsSameLabels() {
-        Instruction instruction = new MulInstructionTest("same", EAX, EBX);
-        Instruction instructionCopy = new MulInstructionTest("same", EAX, EBX);
+        Instruction instruction = new MulInstruction("same", EAX, EBX);
+        Instruction instructionCopy = new MulInstruction("same", EAX, EBX);
         Assertions.assertEquals(instruction, instructionCopy);
     }
 
     @Test
     void testEqualsDifferentLabels() {
-        Instruction instruction = new MulInstructionTest(null, EAX, EBX);
-        Instruction instructionCopy = new MulInstructionTest("same", EAX, EBX);
+        Instruction instruction = new MulInstruction(null, EAX, EBX);
+        Instruction instructionCopy = new MulInstruction("same", EAX, EBX);
         Assertions.assertNotEquals(instruction, instructionCopy);
     }
 
     @Test
     void testHashCode() {
-        Instruction instruction = new MulInstructionTest(null, EAX, EBX);
-        Instruction instructionCopy = new MulInstructionTest("label", EAX, EBX);
+        Instruction instruction = new MulInstruction(null, EAX, EBX);
+        Instruction instructionCopy = new MulInstruction("label", EAX, EBX);
         Assertions.assertEquals(instruction.hashCode(), instruction.hashCode());
         Assertions.assertNotEquals(instructionCopy.hashCode(), instruction.hashCode());
     }
