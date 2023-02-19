@@ -11,6 +11,7 @@ import java.util.Objects;
  * The instruction has an opcode of "sub".
  *
  * @see Instruction
+ * @author alessioerosferri
  */
 public class SubInstruction extends Instruction {
 	private final RegisterName result;

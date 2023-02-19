@@ -11,6 +11,7 @@ import java.util.Objects;
  * The instruction has an opcode of "add".
  *
  * @see Instruction
+ * @author alessioerosferri
  */
 public class AddInstruction extends Instruction {
 	private final RegisterName result;

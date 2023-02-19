@@ -11,6 +11,7 @@ import java.util.Objects;
  * The instruction has an opcode of "mul".
  *
  * @see Instruction
+ * @author alessioerosferri
  */
 public class MulInstruction extends Instruction {
 	private final RegisterName result;
