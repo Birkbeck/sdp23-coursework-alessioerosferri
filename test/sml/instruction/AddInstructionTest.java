@@ -19,7 +19,6 @@ class AddInstructionTest {
   void setUp() {
     machine = new Machine(new Registers());
     registers = machine.getRegisters();
-    //...
   }
 
   @AfterEach
@@ -44,5 +43,46 @@ class AddInstructionTest {
     Instruction instruction = new AddInstruction(null, EAX, EBX);
     instruction.execute(machine);
     Assertions.assertEquals(1, machine.getRegisters().get(EAX));
+  }
+
+  @Test
+  void testToString() {
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Assertions.assertEquals("add EAX EBX", instruction.toString());
+  }
+
+  @Test
+  void testToStringWithLabel() {
+    Instruction instruction = new AddInstruction("alessio", EAX, EBX);
+    Assertions.assertEquals("alessio: add EAX EBX", instruction.toString());
+  }
+
+  @Test
+  void testEquals() {
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction instructionCopy = new AddInstruction(null, EAX, EBX);
+    Assertions.assertEquals(instruction, instructionCopy);
+  }
+
+  @Test
+  void testEqualsSameLabels() {
+    Instruction instruction = new AddInstruction("same", EAX, EBX);
+    Instruction instructionCopy = new AddInstruction("same", EAX, EBX);
+    Assertions.assertEquals(instruction, instructionCopy);
+  }
+
+  @Test
+  void testEqualsDifferentLabels() {
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction instructionCopy = new AddInstruction("same", EAX, EBX);
+    Assertions.assertNotEquals(instruction, instructionCopy);
+  }
+
+  @Test
+  void testHashCode() {
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction instructionCopy = new AddInstruction("label", EAX, EBX);
+    Assertions.assertEquals(instruction.hashCode(), instruction.hashCode());
+    Assertions.assertNotEquals(instructionCopy.hashCode(), instruction.hashCode());
   }
 }
