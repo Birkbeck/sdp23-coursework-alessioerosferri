@@ -32,6 +32,7 @@ class OutInstructionTest {
         machine = null;
         registers = null;
         System.setOut(originalOut);
+        outContent.reset();
     }
 
     @Test
@@ -39,7 +40,7 @@ class OutInstructionTest {
         registers.set(EAX, 12);
         Instruction instruction = new OutInstruction(null, EAX);
         instruction.execute(machine);
-        Assertions.assertEquals(outContent.toString(), "12");
+        Assertions.assertEquals(outContent.toString(), "12\n");
     }
 
     @Test
@@ -47,7 +48,7 @@ class OutInstructionTest {
         registers.set(EAX, 7);
         Instruction instruction = new OutInstruction(null, EAX);
         instruction.execute(machine);
-        Assertions.assertEquals(outContent.toString(), "7");
+        Assertions.assertEquals(outContent.toString(), "7\n");
     }
 
     @Test
