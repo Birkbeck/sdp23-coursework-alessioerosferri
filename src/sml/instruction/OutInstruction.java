@@ -35,7 +35,7 @@ public class OutInstruction extends Instruction {
 	 * Returns program counter value which indicates to execute the next instruction
 	 *
 	 * @param m the machine on which the instruction will be executed
-	 * @return the value of the next instruction to be executed
+	 * @return the NORMAL_PROGRAM_COUNTER_UPDATE to indicate that the next instruction should be executed
 	 */
 	@Override
 	public int execute(Machine m) {
