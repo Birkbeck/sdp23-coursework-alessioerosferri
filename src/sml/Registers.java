@@ -3,23 +3,33 @@ package sml;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// TODO: write a JavaDoc for the class
-
 /**
- *
- * @author ...
+ * The Registers class represents a set of named registers.
+ * Each register has a name and a value, which is an integer.
+ * The class provides methods for setting and getting register values,
+ * as well as for clearing all register values.
+ * @author alessioerosferri
  */
 public final class Registers {
     private final Map<Register, Integer> registers = new HashMap<>();
 
+    /**
+     * Enumeration of register names.
+     */
     public enum Register implements RegisterName {
         EAX, EBX, ECX, EDX, ESP, EBP, ESI, EDI;
     }
 
+    /**
+     * Constructs a new Registers object and clears all register values.
+     */
     public Registers() {
         clear(); // the class is final
     }
 
+    /**
+     * Clears all register values, setting them to 0.
+     */
     public void clear() {
         for (Register register : Register.values())
             registers.put(register, 0);
@@ -45,27 +55,41 @@ public final class Registers {
         return registers.get((Register)register);
     }
 
-    // TODO: use pattern matching for instanceof
-    // https://docs.oracle.com/en/java/javase/14/language/pattern-matching-instanceof-operator.html
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof Registers) {
-            Registers other = (Registers) o;
-            return registers.equals(other.registers);
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return registers.hashCode();
-    }
-
+    /**
+     * Returns a string representation of the Registers object,
+     * in the form "[register1 = value1, register2 = value2, ...]".
+     *
+     * @return a string representation of the Registers object
+     */
     @Override
     public String toString() {
         return registers.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(e -> e.getKey() + " = " + e.getValue())
                 .collect(Collectors.joining(", ", "[", "]")) ;
+    }
+
+    /**
+     * Compares this Registers object to another object for equality.
+     *
+     * @param o the object to compare to
+     * @return true if the objects are equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Registers that) {
+            return registers.equals(that.registers);
+        }
+        return false;
+    }
+
+    /**
+     * Returns a hash code for the Registers object.
+     *
+     * @return a hash code for the Registers object
+     */
+    @Override
+    public int hashCode() {
+        return registers.hashCode();
     }
 }
