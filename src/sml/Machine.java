@@ -9,9 +9,20 @@ import static sml.Instruction.NORMAL_PROGRAM_COUNTER_UPDATE;
 
 /**
  * Represents the machine, the context in which programs run.
- * <p>
- * An instance contains 32 registers and methods to access and change them.
+ * An instance contains 8 registers and methods to access and change them.
  *
+ * The machine executes a program represented by a list of instructions. The instructions are executed sequentially,
+ * starting from the first instruction (index 0), until the program counter reaches the end of the list.
+ *
+ * The machine has 8 registers, each of which can store an integer value.
+ * The machine also has a program counter, which keeps track of the index of the next instruction to be
+ * executed. The program counter is initially set to 0 when a new machine instance is created.
+ *
+ * The machine also has a set of labels, represented by an instance of the {@link Labels} class. The labels can be used
+ * to refer to instruction addresses symbolically.
+ *
+ * The machine is designed to execute a program that is represented by a list of {@link Instruction} objects. Each
+ * instruction contains an opcode, and operands (how many depend on the instruction used). Refer to README for the SML syntax.
  */
 public final class Machine {
 
@@ -45,14 +56,23 @@ public final class Machine {
 		}
 	}
 
+	/**
+	 * @return labels used by the program
+	 */
 	public Labels getLabels() {
 		return this.labels;
 	}
 
+	/**
+	 * @return list of instructions contained in the program
+	 */
 	public List<Instruction> getProgram() {
 		return this.program;
 	}
 
+	/**
+	 * @return registers available in the Machine
+	 */
 	public Registers getRegisters() {
 		return this.registers;
 	}
@@ -70,17 +90,13 @@ public final class Machine {
 				.collect(Collectors.joining("\n"));
 	}
 
-	// TODO: use pattern matching for instanceof
-	// https://docs.oracle.com/en/java/javase/14/language/pattern-matching-instanceof-operator.html
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof Machine) {
-			// TODO:
-			Machine other = (Machine) o;
-			return Objects.equals(this.labels, other.labels)
-					&& Objects.equals(this.program, other.program)
-					&& Objects.equals(this.registers, other.registers)
-					&& this.programCounter == other.programCounter;
+		if (o instanceof Machine that) {
+			return Objects.equals(this.labels, that.labels)
+					&& Objects.equals(this.program, that.program)
+					&& Objects.equals(this.registers, that.registers)
+					&& this.programCounter == that.programCounter;
 		}
 		return false;
 	}
