@@ -50,8 +50,8 @@ class TranslatorTest {
     void readAndTranslateJnz() throws IOException {
         translator = new Translator("test/resources/jnzInstruction.txt");
         translator.readAndTranslate(machine.getLabels(), machine.getProgram());
-        Assertions.assertEquals(machine.getProgram().get(0), new JnzInstruction(null, EAX, "0"));
-        Assertions.assertEquals(machine.getProgram().get(1), new JnzInstruction("label", EAX, "0"));
+        Assertions.assertEquals(machine.getProgram().get(0), new JnzInstruction("firstLabel", EAX, "firstLabel"));
+        Assertions.assertEquals(machine.getProgram().get(1), new JnzInstruction("label", EAX, "firstLabel"));
     }
 
     @Test

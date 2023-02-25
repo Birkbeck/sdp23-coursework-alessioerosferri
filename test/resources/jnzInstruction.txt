@@ -1,2 +1,2 @@
-jnz EAX 0
-label: jnz EAX 0
+firstLabel: jnz EAX firstLabel
+label: jnz EAX firstLabel

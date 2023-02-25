@@ -1,21 +1,26 @@
 package sml;
 
-import sml.instruction.*;
-
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static sml.Registers.Register;
 
 /**
- * This class ....
+ * This class translates an SML program from a source file.
  * <p>
- * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
+ * It reads in a file and processes each line, converting it into an SML instruction.
+ * The resulting instructions are stored in a list, along with their labels.
+ * <p>
+ * The Translator uses reflection API to instantiate the appropriate Instruction subclass based on the opcode found
+ * in the input file. The Instruction subclasses must follow a specific naming convention and be located in the
+ * "sml.instruction" package.
  *
- * @author ...
+ * @author alessioerosferri
  */
 public final class Translator {
 
@@ -27,10 +32,6 @@ public final class Translator {
     public Translator(String fileName) {
         this.fileName =  fileName;
     }
-
-    // translate the small program in the file into lab (the labels) and
-    // prog (the program)
-    // return "no errors were detected"
 
     public void readAndTranslate(Labels labels, List<Instruction> program) throws IOException {
         try (var sc = new Scanner(new File(fileName), StandardCharsets.UTF_8)) {
@@ -66,50 +67,43 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        switch (opcode) {
-            case AddInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case DivInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new DivInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case JnzInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new JnzInstruction(label, Register.valueOf(r), s);
-            }
-            case MovInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new MovInstruction(label, Register.valueOf(r), Integer.parseInt(s));
-            }
-            case MulInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case SubInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case OutInstruction.OP_CODE -> {
-                String r = scan();
-                return new OutInstruction(label, Register.valueOf(r));
+        String composedStringClass = "sml.instruction." + Character.toUpperCase(opcode.charAt(0)) + opcode.substring(1) + "Instruction";
+
+        try {
+            Class<?> klass = Class.forName(composedStringClass);
+            Constructor<?>[] constructors = klass.getConstructors();
+            if (constructors.length == 0){
+                throw new NoSuchMethodException("Class: "+composedStringClass + " cannot be instantiated.");
             }
 
-            // TODO: Then, replace the switch by using the Reflection API
+            Constructor<?> constructor = constructors[0];
+            Class<?>[] paramTypesDeclared = constructor.getParameterTypes();
 
-            // TODO: Next, use dependency injection to allow this machine class
-            //       to work with different sets of opcodes (different CPUs)
+            // going through parameters in constructor signature and constructing through a stream the params to send upon instantiating the Instruction.
+            List<Object> params = Arrays.stream(paramTypesDeclared)
+                    .skip(1)
+                    .map((e)->{
+                        switch (e.getName()){
+                            case "sml.RegisterName" -> {
+                                return Register.valueOf(scan());
+                            }
+                            case "java.lang.Integer" -> {
+                                return Integer.parseInt(scan());
+                            }
+                            default -> {
+                                // unknown how to handle, defaulting to String
+                                return scan();
+                            }
+                        }
+                    })
+                    .collect(Collectors.toList());
 
-            default -> {
-                System.out.println("Unknown instruction: " + opcode);
-            }
+            params.add(0, label);
+            return (Instruction) constructor.newInstance(params.toArray());
+        } catch (ClassNotFoundException e) {
+            System.out.println("Unknown instruction with opcode: " + opcode);
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
         }
         return null;
     }
