@@ -66,8 +66,8 @@ public final class Labels {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Labels labels1)) return false;
-		return labels.equals(labels1.labels);
+		if (!(o instanceof Labels that)) return false;
+		return labels.equals(that.labels);
 	}
 
 	@Override
