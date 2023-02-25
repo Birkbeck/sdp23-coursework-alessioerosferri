@@ -23,11 +23,11 @@ public class MovInstruction extends Instruction {
 	/**
 	 * Constructor: creates a new MovInstruction with a label, source, and result register.
 	 *
-	 * @param label the label of the instruction (can be null)
-	 * @param source the value to be stored
+	 * @param label  the label of the instruction (can be null)
 	 * @param result the register where the store operation will be executed
+	 * @param source the value to be stored
 	 */
-	public MovInstruction(String label, Integer source, RegisterName result) {
+	public MovInstruction(String label, RegisterName result, Integer source) {
 		super(label, OP_CODE);
 		this.result = result;
 		this.source = source;
@@ -51,7 +51,7 @@ public class MovInstruction extends Instruction {
 	 */
 	@Override
 	public String toString() {
-		return getLabelString() + getOpcode() + " " + source + " " + result;
+		return getLabelString() + getOpcode() + " " + result + " " + source;
 	}
 
 	/**
@@ -63,7 +63,8 @@ public class MovInstruction extends Instruction {
 		if (this == o) return true;
 		if (!(o instanceof MovInstruction that)) return false;
 		return source.equals(that.source)
-				&& Objects.equals(label, that.getLabel());
+				&& Objects.equals(label, that.getLabel())
+				&& Objects.equals(result, that.result);
 	}
 
 	/**
