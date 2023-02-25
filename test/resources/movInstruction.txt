@@ -1,0 +1,2 @@
+mov EAX 1
+label: mov EAX 1

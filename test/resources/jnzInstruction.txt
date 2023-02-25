@@ -1,0 +1,2 @@
+jnz EAX 0
+label: jnz EAX 0

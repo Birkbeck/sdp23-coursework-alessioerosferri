@@ -1,0 +1,2 @@
+out EAX
+label: out EAX

@@ -1,0 +1,2 @@
+add EAX EBX
+label: add EAX EBX

@@ -1,0 +1,2 @@
+mul EAX EBX
+label: mul EAX EBX

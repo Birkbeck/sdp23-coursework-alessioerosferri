@@ -1,0 +1,2 @@
+sub EAX EBX
+label: sub EAX EBX

@@ -1,0 +1,2 @@
+div EAX EBX
+label: div EAX EBX
