@@ -49,13 +49,8 @@ public class JnzInstruction extends Instruction {
 	public int execute(Machine m) {
 		int value = m.getRegisters().get(source);
 		if (value != 0){
-			List<Instruction> instructions = m.getProgram();
-			Optional<Instruction> found = instructions.stream()
-					.filter(e -> e.getLabel().equals(this.nextInstructionLabel))
-					.findFirst();
-			if (found.isPresent()){
-				return instructions.indexOf(found.get());
-			}
+			int address = m.getLabels().getAddress(this.nextInstructionLabel);
+			return address;
 		}
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}

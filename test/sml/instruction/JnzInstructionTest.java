@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sml.Instruction;
+import sml.Labels;
 import sml.Machine;
 import sml.Registers;
 
@@ -16,17 +17,20 @@ import static sml.Registers.Register.EAX;
 class JnzInstructionTest {
   private Machine machine;
   private Registers registers;
-
   private List<Instruction> instructions;
+  private Labels labels;
 
   @BeforeEach
   void setUp() {
     machine = new Machine(new Registers());
+    labels = machine.getLabels();
     registers = machine.getRegisters();
     instructions = machine.getProgram();
     Instruction firstInstruction = new JnzInstruction("l", EAX, "l");
     Instruction secondInstruction = new JnzInstruction("k", EAX, "k");
     instructions.addAll(Arrays.asList(firstInstruction, secondInstruction));
+    labels.addLabel("l", 0);
+    labels.addLabel("k", 1);
   }
 
   @AfterEach
@@ -64,8 +68,7 @@ class JnzInstructionTest {
   void executeValidFourth() {
     registers.set(EAX, -10);
     Instruction instruction = new JnzInstruction(null, EAX, "doesnotexist");
-    int programCounter = instruction.execute(machine);
-    Assertions.assertEquals(Instruction.NORMAL_PROGRAM_COUNTER_UPDATE, programCounter);
+    Assertions.assertThrows(NullPointerException.class, ()->instruction.execute(machine));
   }
 
   @Test
