@@ -28,9 +28,11 @@ public final class Translator {
 
     // line contains the characters in the current line that's not been processed yet
     private String line = "";
+    private final InstructionFactory instructionFactory;
 
     public Translator(String fileName) {
         this.fileName =  fileName;
+        instructionFactory = InstructionFactory.getInstance();
     }
 
     public void readAndTranslate(Labels labels, List<Instruction> program) throws IOException {
@@ -67,45 +69,7 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        String composedStringClass = "sml.instruction." + Character.toUpperCase(opcode.charAt(0)) + opcode.substring(1) + "Instruction";
-
-        try {
-            Class<?> klass = Class.forName(composedStringClass);
-            Constructor<?>[] constructors = klass.getConstructors();
-            if (constructors.length == 0){
-                throw new NoSuchMethodException("Class: "+composedStringClass + " cannot be instantiated.");
-            }
-
-            Constructor<?> constructor = constructors[0];
-            Class<?>[] paramTypesDeclared = constructor.getParameterTypes();
-
-            // going through parameters in constructor signature and constructing through a stream the params to send upon instantiating the Instruction.
-            List<Object> params = Arrays.stream(paramTypesDeclared)
-                    .skip(1)
-                    .map((e)->{
-                        switch (e.getName()){
-                            case "sml.RegisterName" -> {
-                                return Register.valueOf(scan());
-                            }
-                            case "java.lang.Integer" -> {
-                                return Integer.parseInt(scan());
-                            }
-                            default -> {
-                                // unknown how to handle, defaulting to String
-                                return scan();
-                            }
-                        }
-                    })
-                    .collect(Collectors.toList());
-
-            params.add(0, label);
-            return (Instruction) constructor.newInstance(params.toArray());
-        } catch (ClassNotFoundException e) {
-            System.out.println("Unknown instruction with opcode: " + opcode);
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return instructionFactory.createInstruction(label, opcode, this::scan);
     }
 
 
