@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="add" scope="prototype" class="sml.instruction.AddInstruction"/>
+    <bean id="div" scope="prototype" class="sml.instruction.DivInstruction"/>
+    <bean id="jnz" scope="prototype" class="sml.instruction.JnzInstruction"/>
+    <bean id="mov" scope="prototype" class="sml.instruction.MovInstruction"/>
+    <bean id="mul" scope="prototype" class="sml.instruction.MulInstruction"/>
+    <bean id="out" scope="prototype" class="sml.instruction.OutInstruction"/>
+    <bean id="sub" scope="prototype" class="sml.instruction.SubInstruction"/>
+</beans>

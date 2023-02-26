@@ -1,7 +1,9 @@
 package sml;
 
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
@@ -9,20 +11,19 @@ import java.util.stream.Collectors;
 
 public class InstructionFactory {
     private static final InstructionFactory instance = new InstructionFactory();
+    private BeanFactory beanFactory;
     public static InstructionFactory getInstance() {
         return instance;
     }
     private InstructionFactory(){
-
+        beanFactory = new ClassPathXmlApplicationContext("/beans.xml");
     }
     public Instruction createInstruction(String label, String opcode, Supplier<String> scan){
-        String composedStringClass = "sml.instruction." + Character.toUpperCase(opcode.charAt(0)) + opcode.substring(1) + "Instruction";
-
         try {
-            Class<?> klass = Class.forName(composedStringClass);
+            Class<?> klass = beanFactory.getType(opcode);
             Constructor<?>[] constructors = klass.getConstructors();
             if (constructors.length == 0){
-                throw new NoSuchMethodException("Class: "+composedStringClass + " cannot be instantiated.");
+                throw new NoSuchMethodException("Class: "+klass.getName() + " cannot be instantiated.");
             }
 
             Constructor<?> constructor = constructors[0];
@@ -48,10 +49,8 @@ public class InstructionFactory {
                     .collect(Collectors.toList());
 
             params.add(0, label);
-            return (Instruction) constructor.newInstance(params.toArray());
-        } catch (ClassNotFoundException e) {
-            System.out.println("Unknown instruction with opcode: " + opcode);
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            return (Instruction) beanFactory.getBean(opcode, params.toArray());
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
         return null;
