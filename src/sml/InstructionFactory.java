@@ -18,7 +18,8 @@ import java.util.stream.Collectors;
 public class InstructionFactory {
     private static final InstructionFactory instance = new InstructionFactory();
     private BeanFactory beanFactory;
-    private InstructionFactory(){
+
+    private InstructionFactory() {
         beanFactory = new ClassPathXmlApplicationContext("/beans.xml");
     }
 
@@ -37,17 +38,17 @@ public class InstructionFactory {
      * The parameters are obtained by calling the Supplier function passed as an argument.
      * Returns null if the class cannot be instantiated.
      *
-     * @param label the label for the Instruction.
+     * @param label  the label for the Instruction.
      * @param opcode the opcode for the Instruction.
-     * @param scan the Supplier function used to obtain the parameters for the Instruction.
+     * @param scan   the Supplier function used to obtain the parameters for the Instruction.
      * @return the Instruction object created or null if the class cannot be instantiated.
      */
-    public Instruction createInstruction(String label, String opcode, Supplier<String> scan){
+    public Instruction createInstruction(String label, String opcode, Supplier<String> scan) {
         try {
             Class<?> klass = beanFactory.getType(opcode);
             Constructor<?>[] constructors = klass.getConstructors();
-            if (constructors.length == 0){
-                throw new NoSuchMethodException("Class: "+klass.getName() + " cannot be instantiated.");
+            if (constructors.length == 0) {
+                throw new NoSuchMethodException("Class: " + klass.getName() + " cannot be instantiated.");
             }
 
             Constructor<?> constructor = constructors[0];
@@ -56,8 +57,8 @@ public class InstructionFactory {
             // going through parameters in constructor signature and constructing through a stream the params to send upon instantiating the Instruction.
             List<Object> params = Arrays.stream(paramTypesDeclared)
                     .skip(1)
-                    .map((e)->{
-                        switch (e.getName()){
+                    .map((e) -> {
+                        switch (e.getName()) {
                             case "sml.RegisterName" -> {
                                 return Registers.Register.valueOf(scan.get());
                             }

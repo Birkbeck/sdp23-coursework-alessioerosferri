@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
  * Each register has a name and a value, which is an integer.
  * The class provides methods for setting and getting register values,
  * as well as for clearing all register values.
+ *
  * @author alessioerosferri
  */
 public final class Registers {
@@ -39,10 +40,10 @@ public final class Registers {
      * Sets the given register to the value.
      *
      * @param register register name
-     * @param value new value
+     * @param value    new value
      */
     public void set(RegisterName register, int value) {
-        registers.put((Register)register, value);
+        registers.put((Register) register, value);
     }
 
     /**
@@ -52,7 +53,7 @@ public final class Registers {
      * @return value
      */
     public int get(RegisterName register) {
-        return registers.get((Register)register);
+        return registers.get((Register) register);
     }
 
     /**
@@ -66,7 +67,7 @@ public final class Registers {
         return registers.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(e -> e.getKey() + " = " + e.getValue())
-                .collect(Collectors.joining(", ", "[", "]")) ;
+                .collect(Collectors.joining(", ", "[", "]"));
     }
 
     /**

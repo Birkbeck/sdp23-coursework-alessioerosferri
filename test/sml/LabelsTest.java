@@ -29,7 +29,7 @@ class LabelsTest {
     @Test
     void addLabelDuplicate() {
         labels.addLabel("L", 1);
-        Assertions.assertThrows(IllegalArgumentException.class, ()->labels.addLabel("L", 2));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> labels.addLabel("L", 2));
     }
 
     @Test
@@ -40,7 +40,7 @@ class LabelsTest {
 
     @Test
     void getAddressNonExistent() {
-        Assertions.assertThrows(NullPointerException.class, ()->labels.getAddress("L"));
+        Assertions.assertThrows(NullPointerException.class, () -> labels.getAddress("L"));
     }
 
     @Test

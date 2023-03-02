@@ -31,7 +31,7 @@ public final class Translator {
     private final InstructionFactory instructionFactory;
 
     public Translator(String fileName) {
-        this.fileName =  fileName;
+        this.fileName = fileName;
         instructionFactory = InstructionFactory.getInstance();
     }
 

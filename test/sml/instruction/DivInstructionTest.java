@@ -44,6 +44,7 @@ class DivInstructionTest {
         instruction.execute(machine);
         Assertions.assertEquals(1, machine.getRegisters().get(EAX));
     }
+
     @Test
     void executeValidThird() {
         registers.set(EAX, 3);
